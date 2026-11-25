@@ -84,6 +84,21 @@
 }
 .p-sheet { background: var(--paper); }
 
+/* Link do aluno: só a app. No telemóvel ocupa o ecrã todo; no computador aparece dentro da moldura. */
+.student-only { min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; background: var(--chalk); padding: 20px 0; }
+@media (max-width: 520px) {
+  .student-only { padding: 0; place-items: stretch; }
+  .phone.fullscreen { width: 100%; height: 100vh; height: 100dvh; border-radius: 0; padding: 0; box-shadow: none; }
+  .phone.fullscreen .phone-screen { border-radius: 0; }
+  .phone.fullscreen .phone-top { padding-top: calc(14px + env(safe-area-inset-top)); }
+  .phone.fullscreen .phone-nav { padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
+}
+.sync-float { position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%); background: var(--iron); color: #fff; font-size: 13px; padding: 8px 14px; border-radius: 99px; z-index: 50; max-width: calc(100vw - 32px); text-align: center; }
+.sync-chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--ink-3); white-space: nowrap; }
+.sync-chip i { width: 8px; height: 8px; border-radius: 50%; background: var(--green); display: inline-block; }
+.sync-chip.saving i { background: var(--yellow); }
+.sync-chip.offline i, .sync-chip.error i { background: var(--red); }
+
 * { box-sizing: border-box; }
 html, body, #root { height: 100%; }
 body {

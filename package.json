@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "build:single": "vite build --mode single",
+    "build:online": "tsc --noEmit && vite build --mode online",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit"
   },

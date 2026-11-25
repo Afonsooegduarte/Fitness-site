@@ -15,7 +15,7 @@ import { AdherenceStrip, LineChart } from '../components/charts';
 import { SendMessageModal } from './Today';
 import { exercisesAt, gymOf, missingEquipment } from '../lib/gyms';
 import { streakOf, visitDays } from '../lib/streak';
-import { Building2 } from 'lucide-react';
+import { Building2, Link2 } from 'lucide-react';
 import { PlanHistoryDrawer } from './PlanHistory';
 
 type Tab = 'resumo' | 'medicoes' | 'planos' | 'avaliacoes' | 'dados';
@@ -24,6 +24,7 @@ export function StudentDetailPage({ id, route }: { id: string; route: Route }) {
   const { db, mutate } = useStore();
   const [tab, setTab] = useState<Tab>((route.query.get('tab') as Tab) || 'resumo');
   const [msg, setMsg] = useState(false);
+  const toastLink = useToast();
   const s = db.students.find((x) => x.id === id);
   if (!s) return <div className="page"><Empty title="Aluno não encontrado" action={<button className="btn" onClick={() => navigate('/alunos')}>Voltar aos alunos</button>} /></div>;
   const coach = staffById(db, s.coachId);
@@ -51,6 +52,21 @@ export function StudentDetailPage({ id, route }: { id: string; route: Route }) {
         actions={
           <>
             <button className="btn" onClick={() => navigate('/aluno?id=' + s.id)}><Smartphone size={16} /> Ver na app</button>
+            <button
+              className="btn"
+              title="Link que abre só a app do aluno, para enviares ao aluno"
+              onClick={async () => {
+                const url = location.origin + location.pathname + '#/app?id=' + s.id;
+                try {
+                  await navigator.clipboard.writeText(url);
+                  toastLink('Link da app copiado. Envia-o ao aluno.');
+                } catch {
+                  window.prompt('Copia o link da app do aluno:', url);
+                }
+              }}
+            >
+              <Link2 size={16} /> Copiar link da app
+            </button>
             <button className="btn btn-primary" onClick={() => setMsg(true)}><MessageSquare size={16} /> Enviar mensagem</button>
           </>
         }

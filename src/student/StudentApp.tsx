@@ -45,7 +45,30 @@ export function StudentAppPage() {
   );
 }
 
-export function StudentPhone({ studentId, dbOverride, readOnly }: { studentId: string; dbOverride?: DB; readOnly?: boolean }) {
+export function StudentOnlyPage() {
+  const { db, sync } = useStore();
+  const route = useRoute();
+  const id = route.query.get('id');
+  const s = id ? db.students.find((x) => x.id === id) : undefined;
+  if (!s) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', padding: 24, textAlign: 'center', background: 'var(--chalk)' }}>
+        <div>
+          <h2>Link inválido</h2>
+          <p className="muted mt-sm">Pede ao teu treinador o link da tua app.</p>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className="student-only">
+      <StudentPhone studentId={s.id} fullscreen />
+      {(sync === 'offline' || sync === 'error') && <div className="sync-float">Sem ligação. O que fizeres é enviado quando a ligação voltar.</div>}
+    </div>
+  );
+}
+
+export function StudentPhone({ studentId, dbOverride, readOnly, fullscreen }: { studentId: string; dbOverride?: DB; readOnly?: boolean; fullscreen?: boolean }) {
   const store = useStore();
   const db = dbOverride ?? store.db;
   const toast = useToast();
@@ -65,7 +88,7 @@ export function StudentPhone({ studentId, dbOverride, readOnly }: { studentId: s
   if (!s) return <p className="faint">Sem alunos para pré-visualizar.</p>;
   const ctx = { db, s, mutate: mutate as any, toast, readOnly: !!readOnly, go: setTab };
   return (
-    <div className="phone" style={{ ['--app-primary' as any]: b.primary }}>
+    <div className={`phone ${fullscreen ? 'fullscreen' : ''}`} style={{ ['--app-primary' as any]: b.primary }}>
       <div className="phone-screen">
         <div className="phone-top" style={{ background: b.primary }}>
           <div className="row">

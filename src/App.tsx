@@ -12,7 +12,7 @@ import { SupplementsPage, QuestionnairesPage, CoursesPage, VaultPage } from './p
 import { WelcomePacksPage, AutomationsPage } from './pages/Automation';
 import { StaffPage, CommunitiesPage } from './pages/Team';
 import { PackagesPage, MyAppPage, IntegrationsPage, ReferralPage, SubscriptionPage, SettingsPage, SupportPage } from './pages/Business';
-import { StudentAppPage } from './student/StudentApp';
+import { StudentAppPage, StudentOnlyPage } from './student/StudentApp';
 import { GymsPage } from './pages/Gyms';
 import { StreakPage } from './pages/Streak';
 import { Empty } from './components/ui';
@@ -21,6 +21,10 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 export default function App() {
   const route = useRoute();
   const [a, b, c] = route.parts;
+  // Link para enviar ao aluno: só a app dele, em ecrã inteiro, sem o menu do treinador.
+  if (a === 'app') {
+    return <ErrorBoundary key={route.path}><StudentOnlyPage /></ErrorBoundary>;
+  }
   let page;
   switch (a) {
     case undefined: page = <TodayPage />; break;

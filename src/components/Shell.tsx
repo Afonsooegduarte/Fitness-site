@@ -82,7 +82,7 @@ export function ThemeButton({ size = 18, light }: { size?: number; light?: boole
 const NOTIF_ICON ={ receita: ChefHat, avaliacao: ClipboardList, mensagem: MessagesSquare, sistema: Info, automacao: Workflow, ginasio: Building2 } as const;
 
 export function Shell({ route, children }: { route: Route; children: ReactNode }) {
-  const { db, mutate, saved } = useStore();
+  const { db, mutate, saved, sync, syncDetail } = useStore();
   const [open, setOpen] = useState(false);
   const base = '/' + (route.parts[0] ?? '');
   const me = currentUser(db);
@@ -160,6 +160,12 @@ export function Shell({ route, children }: { route: Route; children: ReactNode }
               ))}
             </select>
           </label>
+          {sync !== 'local' && (
+            <span className={`sync-chip ${sync}`} role="status" title={syncDetail || undefined}>
+              <i aria-hidden />
+              {sync === 'saving' ? 'A guardar…' : sync === 'offline' ? 'Sem ligação' : sync === 'error' ? 'Erro ao guardar' : sync === 'loading' ? 'A carregar…' : 'Guardado'}
+            </span>
+          )}
           <ThemeButton />
           <Notifications />
           <div className="row hide-sm" style={{ gap: 8 }}>
